@@ -61,7 +61,7 @@
                     if (lines[y].startsWith("-")) {
                         modClass = " remove";
                     }
-                    diff += "<div class=\"line" + modClass + "\">" + lines[y] + "</div>";
+                    diff += "<div class=\"line" + modClass + "\">" + lines[y].replace(/ /g, "&nbsp;") + "</div>";
                 }
             }
         }
