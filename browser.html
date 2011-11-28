@@ -19,7 +19,7 @@
         }
 
         .line {
-            margin: 0 0 0 40px;  /*--Left Margin--*/
+            margin: 0 0 0 40px; /*--Left Margin--*/
             font-size: 12px;
             width: 600px;
         }
@@ -32,6 +32,12 @@
 <body>
 
 <script type="text/javascript">
+
+    function getURLParameter(name) {
+        return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [,null])[1]
+        );
+    }
 
     if (typeof String.prototype.startsWith != 'function') {
         String.prototype.startsWith = function (str) {
@@ -89,9 +95,14 @@
     };
 
     $(document).ready(function() {
-        var lastCommit = "c5807472c30485c218a41b7645b43baeeb29704f";
-        var initialCommit = "9e9ef1c11a52580a4624743bfe902d3848d64374";
+        var lastCommit = getURLParameter("from");
+        var initialCommit = getURLParameter("to");
+
+        //var lastCommit = "c5807472c30485c218a41b7645b43baeeb29704f";
+        //var initialCommit = "9e9ef1c11a52580a4624743bfe902d3848d64374";
+
         fetchAndDisplayCommits(lastCommit, initialCommit);
+
     });
 
 </script>
