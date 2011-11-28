@@ -71,7 +71,7 @@
 
     var displayCommit = function (commit) {
         var diff = diffAsHtml(commit);
-        var commitAsHtml = "<div class=\"commit\"><div class=\"header\">" + commit.committer.name + ": " + commit.message + " <a href=\"" + base_url + commit.url + "\"> view </a></div><div>" + diff + "</div></div>";
+        var commitAsHtml = "<div class=\"commit\"><div class=\"header\">" + commit.committer.name + ": " + commit.message + " <a href=\"" + base_url + commit.url + "\" target=\"_blank\"> view </a></div><div>" + diff + "</div></div>";
         $("#msgid").after(commitAsHtml);
     };
 
