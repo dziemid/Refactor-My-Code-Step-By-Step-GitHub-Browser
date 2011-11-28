@@ -1,0 +1,75 @@
+<html>
+<head>
+    <title>Git history spike</title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <style type="text/css">
+        <!--
+        .header {
+            background-color: #FFCC33;
+        }
+
+        -->
+    </style>
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+    var base_url = "http://github.com";
+    var base_api_url = base_url + "/api/v2/json/commits/show";
+
+    var diffAsHtml = function (commit) {
+        var diff = "<div>";
+        if (commit.modified) {
+            for (var i = 0; i < commit.modified.length; i++) {
+                diff += commit.modified[i].diff.replace(/\n/g, '<br>');
+            }
+        }
+        diff += "</div>";
+        return diff;
+    };
+
+    var displayCommit = function (commit) {
+        var diff = diffAsHtml(commit);
+        var commitAsHtml = "<div class=\"commit\"><div class=\"header\">" + commit.committer.name + ": " + commit.message + " <a href=\"" + base_url + commit.url + "\"> view </a></div><div>" + diff + "</div></div>";
+        $("#msgid").after(commitAsHtml);
+    };
+
+
+    var fetchAndDisplayCommits = function (from, to) {
+        var the_url = base_api_url + "/dziemid/refactormycode/" + from;
+
+        $.ajax({
+            url: the_url,
+            dataType: 'jsonp',
+            type: 'get',
+            success: function(data) {
+                var commit = data.commit;
+                displayCommit(commit);
+
+                if (from != to) {
+                    fetchAndDisplayCommits(commit.parents[0].id, to);
+                }
+            }
+        });
+    };
+
+    $(document).ready(function() {
+        var lastCommit = "c5807472c30485c218a41b7645b43baeeb29704f";
+        var initialCommit = "9e9ef1c11a52580a4624743bfe902d3848d64374";
+        fetchAndDisplayCommits(lastCommit, initialCommit);
+    });
+
+</script>
+<div id="msgid">
+    Commits
+</div>
+
+</body>
+</html>
+
+
+
