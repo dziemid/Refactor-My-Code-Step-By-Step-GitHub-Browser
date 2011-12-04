@@ -61,7 +61,7 @@
                     if (lines[y].startsWith("-")) {
                         modClass = " remove";
                     }
-                    diff += "<div class=\"line" + modClass + "\">" + lines[y].replace(/ /g, "&nbsp;") + "</div>";
+                    diff += "<div class=\"line" + modClass + "\">" + lines[y].replace(/ /g, "&nbsp;").replace(/</g, "&lt;") + "</div>";
                 }
             }
         }
@@ -97,9 +97,6 @@
     $(document).ready(function() {
         var lastCommit = getURLParameter("from");
         var initialCommit = getURLParameter("to");
-
-        //var lastCommit = "c5807472c30485c218a41b7645b43baeeb29704f";
-        //var initialCommit = "9e9ef1c11a52580a4624743bfe902d3848d64374";
 
         fetchAndDisplayCommits(lastCommit, initialCommit);
 
