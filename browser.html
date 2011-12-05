@@ -3,6 +3,15 @@
     <title>Git history spike</title>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="src/github.js"></script>
+    <script type="text/javascript">
+        <!--
+            $(document).ready(function() {
+                createApplication().start();
+            });
+        -->
+    </script>
+
 
     <style type="text/css">
         <!--
@@ -31,78 +40,6 @@
 
 <body>
 
-<script type="text/javascript">
-
-    function getURLParameter(name) {
-        return decodeURI(
-                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [,null])[1]
-        );
-    }
-
-    if (typeof String.prototype.startsWith != 'function') {
-        String.prototype.startsWith = function (str) {
-            return this.indexOf(str) == 0;
-        };
-    }
-
-    var base_url = "http://github.com";
-    var base_api_url = base_url + "/api/v2/json/commits/show";
-
-    var diffAsHtml = function (commit) {
-        var diff = "<div>";
-        if (commit.modified) {
-            for (var i = 0; i < commit.modified.length; i++) {
-                var lines = commit.modified[i].diff.split(/\n/g);
-                for (var y = 0; y < lines.length; y++) {
-                    var modClass = "";
-                    if (lines[y].startsWith("+")) {
-                        modClass = " add";
-                    }
-                    if (lines[y].startsWith("-")) {
-                        modClass = " remove";
-                    }
-                    diff += "<div class=\"line" + modClass + "\">" + lines[y].replace(/ /g, "&nbsp;").replace(/</g, "&lt;") + "</div>";
-                }
-            }
-        }
-        diff += "</div>";
-        return diff;
-    };
-
-    var displayCommit = function (commit) {
-        var diff = diffAsHtml(commit);
-        var commitAsHtml = "<div class=\"commit\"><div class=\"header\">" + commit.committer.name + ": " + commit.message + " <a href=\"" + base_url + commit.url + "\" target=\"_blank\"> view </a></div><div>" + diff + "</div></div>";
-        $("#msgid").after(commitAsHtml);
-    };
-
-
-    var fetchAndDisplayCommits = function (from, to) {
-        var the_url = base_api_url + "/dziemid/refactormycode/" + from;
-
-        $.ajax({
-            url: the_url,
-            dataType: 'jsonp',
-            type: 'get',
-            success: function(data) {
-                var commit = data.commit;
-                displayCommit(commit);
-
-                if (from != to) {
-                    fetchAndDisplayCommits(commit.parents[0].id, to);
-                }
-            }
-        });
-    };
-
-    $(document).ready(function() {
-        var lastCommit = getURLParameter("from");
-        var initialCommit = getURLParameter("to");
-
-        fetchAndDisplayCommits(lastCommit, initialCommit);
-
-    });
-
-</script>
 <div id="msgid">
     Commits
 </div>
